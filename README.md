@@ -284,3 +284,109 @@ directory at the moment. For this we will need to add the media root setting.
 
 Next create models and forms.
 
+### Model and Forms
+
+Under `posts` directory open `models.py`. We will be doing some work with time 
+and date. For this reason we will import `timezone` from `django.utils`.  
+
+Create a new class called `Post` which inherits from `models.Model`.
+
+```python 
+from django.db import models
+from django.utils import timezone
+
+class Post(models.Model):
+    """
+    A single blog post.
+    """
+    
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+    published_date = models.DateTimeField(blank=True, null=True, default=timezone.now)
+    views = models.IntegerField(default=0)
+    tag = models.CharField(max_length=30, blank=True, null=True)
+    image = models.ImageField(upload_to="img", blank=True, null=True)
+    
+    def __unicode__(self):
+        return self.title
+```
+
+* **title** field - character field with a maximum length of 200
+
+* **content* - a text field 
+
+* **created_date** - when our blog post was created - a created date field, a 
+date and time field with an attribute of auto_now_add = true, ie. as soon as the 
+record is created then the current date and time will be added into that field. 
+
+* **published_date** - created date could be very different to published date 
+This starts off blank, nulls are allowed but its default value is the current
+time as we get from the time zone. 
+
+* **views** - record the number of views that our blog post has, integer field 
+with default set to zero (when we start, we have no views). 
+
+* **tags** - ability to add tags to group blog posts together, 
+character field with maximum length of 30, can be blank at the beginning and 
+nulls are allowed 
+
+* **image** - user can upload an image, image field 
+attribute upload_to="img". *img* corresponds to the directory that we created 
+under media. This can be blank and can be null.
+
+
+We need to make sure that our Posts are accessible through the admin backend, 
+we need to add them and register them in the admin.py.
+```python 
+from django.contrib import admin
+from .models import Post
+ 
+admin.site.register(Post)
+```
+
+
+### Forms
+
+Use the Django forms library to create our form. 
+
+Create a `forms.py` file in the posts app folder. Import the forms library. 
+We also need to import the Post class from our models.
+
+We will create a BlogPostForm. We only want the user editable fields in the 
+form.
+```python 
+from django import forms
+from .models import Post
+
+class BlogPostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('title', 'content', 'image', 'tag', 'published_date')
+```
+ 
+ Becasue we are using `image field` we need a library called **`Pillow`**. We 
+ will pip install this otherwise our migrations would fail. Then we will create 
+ a new requirements.txt file.
+ 
+ ```bash 
+ (foo) (master) $ pip3 install pillow
+ (foo) (master) $ pip freeze > requirements.txt
+ ```
+ 
+ Next we will do migrations.
+ ```bash 
+ (foo) (master) $ ./manage.py makemigrations
+Migrations for 'posts':
+  posts/migrations/0001_initial.py
+    - Create model Post
+ (foo) (master) $ ./manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, posts, sessions
+Running migrations:
+  Applying posts.0001_initial... OK
+ ```
+ 
+ Now our database is updated. We created our models and forms.
+ 
+ Next: create views.
