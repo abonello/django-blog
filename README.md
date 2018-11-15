@@ -212,4 +212,75 @@ script:
 ```
 This will sync the repo with Travis.  
 
+After some time (first time takes longer as it has to install requirements), the 
+Travis badge turns green showing that our tests have passed. I also recieved an 
+email to this effect.
+
+
+
+### Set up directory structure
+
+Directories for Templates, Media and Static files.  
+
+1. Create an app  
+    Virtual environment need to be activated. Then run:
+
+    ```bash 
+    (foo) (master) $ ./manage.py startapp posts
+    ```
+
+    A new `posts` directory holding the app is created. In this folder create a 
+`templates` directory which will contain all the html templates for this blog
+app.
+
+2. We also need a `media` folder which will serve user-uploaded images. Create this 
+in the root of the project. Create a subfolder called `img`.
+
+3. Create a `static` folder in the root too. This will contain files that do not 
+change. In this folder create a `css` directory for the styles, `img` for static 
+images and `js` for javascript.
+
+### settings.py
+
+1. Tell django that we have an app called posts  
+    In INSTALLED_APPS add 'posts'.
+
+2. Serving out the templates - Tell django where the templates directory is.
+    Find TEMPLATES and find DIR within it
+    ```
+    TEMPLATES = [
+        {   . . .
+            'DIRS': [os.path.join(BASE_DIR, 'templates')],
+            . . .
+        },
+    ]
+    ```
+
+3. Serving our media files properly   
+    Down at the end of context_processors (within the TEMPLATES) add a new 
+    context processor (within the OPTIONS)
+    `django.template.context_processors.media` 
+
+4. Add a MEDIA_URL to start serving the media.  
+    Below the STATIC_URL at the bottom of settings.py add the following
+    ```
+    MEDIA_URL = '/media/'
+    ```
+
+NB. This is how django refers to the url. It does not refer to any specific 
+directory at the moment. For this we will need to add the media root setting.  
+
+5. Set MEDIA_ROOT setting  
+    The BASE_DIR now refers to the one we created: media  
+    ```
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    ```
+
+6. Do the same for static URL, set the ROOT  
+    ```
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+    ```
+
+
+Next create models and forms.
 
