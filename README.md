@@ -2,6 +2,8 @@
 
 ## Mini Project
 
+[![Build Status](https://travis-ci.org/abonello/django-blog.svg?branch=master)](https://travis-ci.org/abonello/django-blog)
+
 A simple blog app written using Django.
 
 Mentor: Matt Rudge  
@@ -154,3 +156,39 @@ uploaded. We do not want any of the python bytecode. We do not want the cloud
 ```bash 
 (foo) (master) $ echo -e "*.sqlite3\n*.pyc\n.~c9\n__pycache__/" > .gitignore
 ```
+We can check which files will be seen by git by using `git status`.  
+
+Add all the files and commit.
+```bash 
+(foo) (master) $ git add .
+(foo) (master) $ git commit -m "Created simple Django project."
+```
+
+Create a github repository. Name: django-blog
+
+The video used SSH but I am using Https
+
+```bash 
+(foo) (master) $ git remote add origin https://github.com/abonello/django-blog.git
+(foo) (master) $ git push -u origin master
+```
+
+### Travis Integration
+
+This is used for Continuous Integration **CI**.
+
+Go to travis-ci.org and sign in with github. Authorize Travis and enter the 
+password. When I sign in I have to click on my name and the accounts menu. (It 
+looks like this has changed and we are already in the accounts.) 
+
+Find our django-blog project and click on its toggle switch. This will enable
+synchronisation between github and Travis.
+Now click on the repository name. We want to copy some markup. Next to the 
+project name there is a github icon and next to this there is a badge saying
+`build unkown`. Click on this. From the second options dropdown select markdown 
+and copy the code that appears. Paste this in the README.md. I will place this 
+just below the headings.
+
+This will allow us to continually keep track of whether our project is passing 
+the tests or not.
+
