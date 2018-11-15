@@ -175,7 +175,7 @@ The video used SSH but I am using Https
 
 ### Travis Integration
 
-This is used for Continuous Integration **CI**.
+This is used for Continuous Integration Testing **CI**.
 
 Go to travis-ci.org and sign in with github. Authorize Travis and enter the 
 password. When I sign in I have to click on my name and the accounts menu. (It 
@@ -191,4 +191,25 @@ just below the headings.
 
 This will allow us to continually keep track of whether our project is passing 
 the tests or not.
+
+The badge actually acts as a link to Travis.
+
+### .travis.yml
+
+We are passing a dummy secret key but when we go on heroku we will hide one as 
+an environment variable.
+
+```
+language: python
+python:
+  - "3.4"
+# command to install dependencies
+install:
+  - pip install -r requirements.txt
+# command to run tests
+script:
+  - SECRET_KEY="ThisIsADummySecretKey" ./manage.py test
+```
+This will sync the repo with Travis.  
+
 
