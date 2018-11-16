@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-if os.path.exist('env.py'):
+if os.path.exists('env.py'):
     import env
     
     
