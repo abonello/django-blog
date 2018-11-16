@@ -57,6 +57,29 @@ video does not follow on it. It has not been applied as far as I know.
 
 ---
 
+
+---
+
+create alias for `./manage.py runserver $IP:$PORT`   
+call it `run`
+
+in .bash_aliases add
+```
+alias run="./manage.py runserver $IP:$PORT"
+```
+
+Restart .bash_aliases
+```
+. ~/.bash_aliases
+```
+
+alternatively we can say
+```
+source ~/.bash_aliases
+```
+---
+
+
 ### Virtual environment
 
 Then use mkvirtualenv to make avirtual environment called foo  
@@ -541,4 +564,6 @@ The form will be automatically generated based on the form passed by the view.
 
 **CSRF token** is a protection mechanism provided by Django to make sure that 
 your website isn't vulnerable to cross-site request forgery attacks.
+
+### Create superuser
 
