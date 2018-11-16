@@ -512,4 +512,33 @@ Overriding some bootstrap classes and adding some extra styling.
 In `posts/templates` create `blogposts.html`.  
 Next create `postdetail.html` in the same folder.
 
+Berfore the next template we need to install a new library.
+
+```bash 
+(foo) (master) $ pip install django-forms-bootstrap
+Collecting django-forms-bootstrap
+  Downloading https://files.pythonhosted.org/packages/f2/bd/6bff32d77e093ed7a5804591b8a4dd46f1ccd621129fdcad84afc6d8be30/django_forms_bootstrap-3.1.0-py2.py3-none-any.whl
+Installing collected packages: django-forms-bootstrap
+Successfully installed django-forms-bootstrap-3.1.0
+```
+This help to style forms with bootstrap classes.
+
+Update requirements.txt using pip freeze.
+
+Add this new app to the INSTALLED_APPS in `settings.py`.
+
+Next create our final template, `blogpostform.html`.  
+This template will load bootstrap_tags provided by django-forms-bootstrap library.  
+It allows us to format our forms nicely.
+
+The form is going to use **`enctype='multipart/form-data`**. 
+This is an encoding type that allows files to be sent through a POST. 
+Quite simply, without this encoding the files cannot be sent through POST. 
+If you want to allow a user to upload a file via a form, you must use this enctype.
+
+The form will be automatically generated based on the form passed by the view.
+
+
+**CSRF token** is a protection mechanism provided by Django to make sure that 
+your website isn't vulnerable to cross-site request forgery attacks.
 
