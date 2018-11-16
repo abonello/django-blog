@@ -760,3 +760,16 @@ ALLOWED_HOSTS = [
     'ab-django-blog.herokuapp.com',
 ]
 ```
+
+### Add automatic deploy in heroku
+In dashboard, click the deploy tab. Select Github as Deployment method.  
+If you have not done this already, you will have to authorize this by entering 
+the password, otherwise your github user shows up and just select the repo 
+and click on the `connect` button. 
+
+Go down to manual deploy and click on deploy branch (It is the master branch
+by default.)
+
+Click the `enable automatic deploys` button.
+Also enabled : 
+`Wait for CI to pass before deploy`
