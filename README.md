@@ -595,6 +595,7 @@ In `settigns.py`:
 
     Will generate new keys using 
     [Django Secret Key Generator - miniwebtools](https://www.miniwebtool.com/django-secret-key-generator/)
+
     
     create `env.py` file. Added to `.gitignore`
     ```python 
