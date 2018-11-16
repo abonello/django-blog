@@ -594,7 +594,7 @@ In `settigns.py`:
     not be pushed to github.
 
     Will generate new keys using 
-    [Django Secret Key Generator - miniwebtools](https://www.miniwebtool.com/django-secret-key-generator/)
+    [Django Secret Key Generator - miniwebtools](https://www.miniwebtool.com/django-secret-key-generator/ "secret key generator" target="_blank")
     
     create `env.py` file. Added to `.gitignore`
     ```python 
@@ -605,6 +605,8 @@ In `settigns.py`:
     
     This is for local testing. On heroku we will set the Environment variable.
     
+
+### Deploy to heroku
 
 
 
