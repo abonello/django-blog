@@ -609,7 +609,154 @@ In `settigns.py`:
 
 ### Deploy to heroku
 
+1. 
+Create a Heroku app from dashboard.  
+Name: ab-django-blog  
 
+2. 
+We are going to use a PostgreSQL database (it is a scalable SQL database).
 
+Click on Resources tab, scroll down to add-ons, start typing postgres. Then 
+select Heroku Postgres, Hobby Dev - Free and click on `Provision` button.
 
+3. 
+Go to settings tab. Click on the `Reaveal Config Vars` button. We see that 
+we have a `DATABASE_URL` value. Create a SECRET_KEY. (I created a different one.
+I need to see if it works.)
+ 
+4. 
+Need to add a few more libraries to our project.  
+```bash 
+(foo) (master) $ pip install dj-database-url psycopg2
+```
+These allow use to connect to the database using a url rather than the standard 
+database driver that django uses.  
 
+Recreate the requirements.txt file.  
+
+5. 
+Update settings file to use the new database url. In settings.py, scroll 
+down to DATABASES, comment out the default and we will create a new DATABASES 
+value.
+```
+DATABASES = {
+    'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+}
+```
+This means that when we are working on Heroku it will look for the DATABASE_URL 
+config variable and connect to the database in this way.
+
+We need to import `dj_database_url` in `settings.py`.
+
+When we are working locally we done not have that database set yet. We need to 
+add it in the `env.py` file.
+```python 
+os.environ.setdefault("DATABASE_URL", "postgres://___url_copied_from_heroku_config_vars_____")
+```
+
+6. 
+We need to migrate the postgres database.
+```bash 
+(foo) (master) $ ./manage.py makemigrations
+No changes detected
+(foo) (master) $ ./manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, posts, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying posts.0001_initial... OK
+  Applying sessions.0001_initial... OK
+```
+
+7. 
+We need to create a superuser for this database.
+```bash 
+(foo) (master) $ ./manage.py createsuperuser
+Username (leave blank to use 'ubuntu'): admin
+Email address: admin@example.com
+Password: 
+Password (again): 
+Superuser created successfully.
+```
+
+Now we can connect to the postgres database on heroku even when running the 
+project locally.
+
+8.
+We need some more libraries:
+**whitenoise** - allows us to host our static files correctly on heroku.
+```bash 
+(foo) (master) $ pip install whitenoise
+Collecting whitenoise
+  Downloading https://files.pythonhosted.org/packages/02/0e/9a2c44be678a998ddb96d872b5c1e5bc1db3f3c2b12dcf5d129a7c2f4cbf/whitenoise-4.1.1-py2.py3-none-any.whl
+Installing collected packages: whitenoise
+Successfully installed whitenoise-4.1.1
+(foo) (master) $ pip freeze > requirements.txt
+```
+**gunicorn** - server to run the app on heroku
+```bash 
+(foo) (master) $ pip install gunicorn
+Collecting gunicorn
+  Downloading https://files.pythonhosted.org/packages/8c/da/b8dd8deb741bff556db53902d4706774c8e1e67265f69528c14c003644e6/gunicorn-19.9.0-py2.py3-none-any.whl (112kB)
+    100% |████████████████████████████████| 122kB 6.9MB/s 
+Installing collected packages: gunicorn
+Successfully installed gunicorn-19.9.0
+(foo) (master) $ pip freeze > requirements.txt
+```
+
+9.
+In settings.py file, go to MIDDLEWARE. Add new entry for whitenoise:
+``` 
+'whitenoise.middleware.WhiteNoiseMiddleware',
+```
+Then with the code relating to the static files, add:
+```
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+```
+
+10.
+We need to do some changes to the DATABASES in settings.py. This is to keep the 
+CI testing in Travis working. Wince we are not going to upload `env.py` file 
+Travis will not have a way to access the Postgres database. We will use an if 
+statement that says that if DATABASE_URL is in our environment, then we will 
+use a url. If it is not, we will use the sqlite3.
+```python 
+if "DATABASE_URL" in os.environ:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
+else:
+    print("Postgres URL was not found. Using sqlite instead.")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+```
+
+11.
+Create `Procfile`  
+```
+web: gunicorn blog.wsgi:application
+```
+
+12.  
+ALLOWED_HOSTS in settings.py. Add the heroku host url:
+```python 
+ALLOWED_HOSTS = [
+    'django-blog-ab-anthonybstudent.c9users.io',
+    'ab-django-blog.herokuapp.com',
+]
+```
