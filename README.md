@@ -579,3 +579,8 @@ Superuser created successfully.
 password is 123qwe456
 
 
+### Uploading media
+
+uploaded from github
+
+
