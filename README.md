@@ -567,3 +567,15 @@ your website isn't vulnerable to cross-site request forgery attacks.
 
 ### Create superuser
 
+```bash 
+(foo) (master) $ ./manage.py createsuperuser
+Username (leave blank to use 'ubuntu'): admin
+Email address: admin@example.com
+Password: 
+Password (again): 
+Superuser created successfully.
+```
+
+password is 123qwe456
+
+
