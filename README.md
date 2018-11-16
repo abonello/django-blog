@@ -584,3 +584,29 @@ password is 123qwe456
 uploaded from github
 
 
+### Housekeeping
+
+In `settigns.py`:
+
+1. Secret Key
+    We are going to replace the temporary secret key we were using with a variable
+    stored in `env.py` file or an environment variable in heroku. This file will 
+    not be pushed to github.
+
+    Will generate new keys using 
+    [Django Secret Key Generator - miniwebtools](https://www.miniwebtool.com/django-secret-key-generator/)
+    
+    create `env.py` file. Added to `.gitignore`
+    ```python 
+    import os
+
+    os.environ.setdefault("SECRET_KEY", "'----put-new-secret-key-here-----'")
+    ```
+    
+    This is for local testing. On heroku we will set the Environment variable.
+    
+
+
+
+
+
