@@ -494,3 +494,22 @@ urlpatterns = [
     url(r'?P<pk>\d+)/edit/$', create_or_edit_post, name="edit_post"),
 ]
 ```
+
+### Templates
+
+We need a `templates` folder at the top level of our project to hold our 
+`base.html` file. This is the base template.
+
+Done.  
+
+#### CSS
+Create a `custom.css` file in `static/css`.  
+copied code from https://github.com/Code-Institute-Solutions/blog_miniproject1/blob/master/static/css/custom.css  
+Overriding some bootstrap classes and adding some extra styling.
+  
+  
+#### First template in posts
+In `posts/templates` create `blogposts.html`.  
+Next create `postdetail.html` in the same folder.
+
+
